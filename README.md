@@ -17,18 +17,16 @@ A Claude Code plugin that, for any project:
 
 ## Install
 
-Locally, from this repo:
-
 ```
-/plugin marketplace add /path/to/project-kit
+/plugin marketplace add Randriantahina/project-kit
 /plugin install project-kit@project-kit
 ```
 
-(or, non-interactively: `claude plugin marketplace add /path/to/project-kit`
+(or, non-interactively: `claude plugin marketplace add Randriantahina/project-kit`
 then `claude plugin install project-kit@project-kit`)
 
-Once published to a git remote, replace the path above with
-`<account>/project-kit`.
+For local development instead, point at your working copy:
+`/plugin marketplace add /path/to/project-kit`.
 
 ## Usage
 

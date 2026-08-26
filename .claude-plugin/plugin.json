@@ -16,5 +16,7 @@
     "solid",
     "design-patterns"
   ],
+  "repository": "https://github.com/Randriantahina/project-kit",
+  "homepage": "https://github.com/Randriantahina/project-kit",
   "license": "MIT"
 }
