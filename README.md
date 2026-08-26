@@ -12,8 +12,9 @@ A Claude Code plugin that, for any project:
    Repository/Service layers, ...) applied idiomatically to the detected
    stack(s), plus a note on what the project already follows or violates,
 5. maintains a versioned project memory (`.project-kit/`) so a **new**
-   conversation doesn't need to re-scan the codebase, and keeps a changelog
-   of what was done over time.
+   conversation doesn't need to re-scan the codebase, keeps a changelog of
+   what was done over time, and tracks whether that memory has drifted from
+   the current code so it's never trusted silently once stale.
 
 ## Install
 
@@ -32,13 +33,18 @@ For local development instead, point at your working copy:
 
 - `/project-kit init` — first-time setup in a project: detects the stack,
   writes `.project-kit/PROJECT.md`, `PACKAGES.md`, `BEST-PRACTICES.md`,
-  `skills/<stack>.md`, and wires the first three into the project's
-  `CLAUDE.md` so they load automatically every session.
-- `/project-kit log` — draft and (after your confirmation) append a
-  changelog entry for what just changed. Also triggered automatically at
+  `skills/<stack>.md`, `.state.json`, and a first entry under
+  `changelog/`; wires `PROJECT.md`/`PACKAGES.md`/`BEST-PRACTICES.md` into
+  the project's `CLAUDE.md` so they load automatically every session.
+- `/project-kit log` — draft and (after your confirmation) write a new
+  changelog entry — one file per entry, under `.project-kit/changelog/`, to
+  stay merge-conflict-free across branches. Also triggered automatically at
   the end of a meaningful task.
-- `/project-kit refresh` — update the standing snapshots after a
-  significant architecture change, without touching the changelog history.
+- `/project-kit refresh` — update the standing snapshots (and the
+  staleness state) after a significant architecture change, without
+  touching the changelog history. Also the response to the staleness
+  notice project-kit surfaces when its memory has drifted from the current
+  code.
 
 ## Why
 

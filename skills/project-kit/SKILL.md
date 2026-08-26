@@ -20,8 +20,14 @@ Router skill. Dispatch on the first argument passed after `/project-kit`.
 `.project-kit/BEST-PRACTICES.md` are imported into the project's `CLAUDE.md`
 by `actions/init.md`, so they load automatically at the start of every
 session — do not re-read the whole codebase to rediscover facts already
-in these files. Only fall back to a fresh scan if a file is missing,
-contradicts what you observe in the code, or is clearly stale.
+in these files.
+
+Don't rely on judgment alone to decide whether they're stale: follow
+`references/staleness.md` to check `.project-kit/.state.json` against the
+current repo state, and surface a one-line notice if it has drifted. Only
+fall back to a fresh scan of a specific fact if that check flags drift, a
+file is missing, or something you observe in the code directly contradicts
+what's written.
 
 While writing code in such a project:
 - Consult `.project-kit/BEST-PRACTICES.md` for the design choice to make
@@ -30,8 +36,9 @@ While writing code in such a project:
   theory.
 - After finishing a meaningful task (new feature, bug fix, refactor,
   migration, non-trivial config change), follow `actions/log-change.md` to
-  propose a changelog entry before ending the turn. Skip it for trivial
-  one-line asks the user clearly considers throwaway.
+  propose a new entry under `.project-kit/changelog/` before ending the
+  turn. Skip it for trivial one-line asks the user clearly considers
+  throwaway.
 
 ## Design principles for the actions below
 

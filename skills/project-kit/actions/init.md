@@ -66,17 +66,28 @@ what makes the file actionable instead of a generic lecture.
 
 ## 6. Seed the changelog
 
-Create `.project-kit/CHANGELOG.md` with a single header line and today's
-date as the "created" entry. Entries follow this shape:
+Create the `.project-kit/changelog/` directory with a single first entry,
+`YYYY-MM-DD-HHmm-project-kit-init.md` (today's date/time), following the
+shape used by every future entry (see `log-change.md`):
 
 ```
-## YYYY-MM-DD — <short title>
-- What changed: ...
-- Why: ...
-- Files: path/one, path/two
+## YYYY-MM-DD — project-kit init
+- What changed: initial project-kit setup for this project
+- Why: bootstrap stack skills, package inventory, best-practices, and memory
+- Files: .project-kit/
 ```
 
-## 7. Wire memory into CLAUDE.md
+Each changelog entry is its own file — never a single growing file — so
+that concurrent branches don't collide on it in a merge.
+
+## 7. Write the staleness state
+
+Follow `references/staleness.md` to write `.project-kit/.state.json` — this
+is what lets a future session tell whether everything above is still
+accurate without re-scanning the project. Do this last, after every other
+file in this list has actually been written.
+
+## 8. Wire memory into CLAUDE.md
 
 Ensure the project has a `CLAUDE.md` at its root (create a minimal one if
 missing). Add these lines if not already present (do not duplicate them on
@@ -88,7 +99,12 @@ a re-run):
 @.project-kit/BEST-PRACTICES.md
 ```
 
-## 8. Report
+`.project-kit/changelog/` and `.state.json` are deliberately **not**
+imported here — the changelog would grow the always-on token cost forever,
+and the state file is only useful to the staleness check, not as reading
+material.
+
+## 9. Report
 
 Summarize what was created/detected in the chat: stacks found, files
 written, and remind the user these are plain files they should commit like

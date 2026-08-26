@@ -23,10 +23,17 @@ essay and not a restatement of the diff.
 ## 2. Confirm before writing
 
 Show the drafted entry to the user and ask for a go-ahead (or let them edit
-it) before appending it to `.project-kit/CHANGELOG.md`. This is the hybrid
-behavior: auto-drafted, human-approved. Don't skip the confirmation step
-even if the change seems obviously fine — the user decides what's worth
-keeping in the permanent record.
+it) before writing it as a **new file** under `.project-kit/changelog/`,
+named `YYYY-MM-DD-HHmm-<short-slug>.md` (slug derived from the title, e.g.
+`2026-08-26-1430-order-export-endpoint.md`). This is the hybrid behavior:
+auto-drafted, human-approved. Don't skip the confirmation step even if the
+change seems obviously fine — the user decides what's worth keeping in the
+permanent record.
+
+Never append to an existing changelog file and never touch
+`.project-kit/.state.json` here — one entry per file is what keeps this
+directory conflict-free across branches; the state file is only written by
+`init`/`refresh`.
 
 ## 3. Skip when not worth it
 

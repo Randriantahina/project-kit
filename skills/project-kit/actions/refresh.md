@@ -4,8 +4,13 @@ Run when the user asks to refresh/update project-kit's memory for a project
 that already has `.project-kit/` — typically after the architecture changed
 meaningfully (new stack added, major restructuring, new key dependency).
 
-Unlike `init`, this does **not** touch `CHANGELOG.md` and does not rebuild
-everything from scratch — it updates the standing snapshots in place.
+Unlike `init`, this does **not** touch `.project-kit/changelog/` and does
+not rebuild everything from scratch — it updates the standing snapshots in
+place.
+
+Also run this whenever `references/staleness.md`'s check flags meaningful
+drift and the user agrees it's worth acting on — that's the main trigger in
+practice, not a fixed schedule.
 
 ## 1. Re-detect stacks
 
@@ -33,7 +38,14 @@ Re-check the "state of this project" note from `init` step 5 (which
 patterns are followed/violated) against the current code, and update the
 idiomatic-guidance section if a newly added stack needs its own section.
 
-## 5. Report
+## 5. Rewrite the staleness state
+
+Follow `references/staleness.md` to overwrite `.project-kit/.state.json`
+with the current git commit and manifest hashes — this is what clears the
+drift notice for future sessions. Do this even if steps 1-4 found nothing
+to change, since the state file must still reflect "checked as of now".
+
+## 6. Report
 
 Summarize what changed in these files (not a changelog entry — this is
 project-kit's own bookkeeping, not a task the user asked for). If nothing
