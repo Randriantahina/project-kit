@@ -38,11 +38,14 @@ While writing code in such a project:
 - Consult `.project-kit/BEST-PRACTICES.md` for the design choice to make
   (which pattern, which layer owns what responsibility) — it already
   contains the idiomatic answer for this project's stack, not just generic
-  theory. Unlike the two behaviors below, nothing forces this one — a hook
-  can't judge a design decision — so it only happens if this skill is
-  actually loaded for the task at hand. If the user cares about it being
-  applied consistently even on small tasks, they should say so or invoke
-  `/project-kit` explicitly.
+  theory. `actions/init.md` writes an explicit instruction to this effect
+  directly into `CLAUDE.md` (not just the `@import`), specifically so this
+  applies even when this skill itself never gets invoked for the task — a
+  hook can't judge a design decision, so `CLAUDE.md` being always-loaded is
+  what stands in for one here. Still advisory, not enforced: a project
+  initialized before this existed, or a rewritten `CLAUDE.md` that dropped
+  the instruction line, won't have it — `refresh` doesn't re-add it, only
+  a fresh `init` does.
 - After finishing a meaningful task (new feature, bug fix, refactor,
   migration, non-trivial config change), follow `actions/log-change.md` to
   propose a new entry under `.project-kit/changelog/` before ending the

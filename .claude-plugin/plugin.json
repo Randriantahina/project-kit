@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "project-kit",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Detects a project's stack, generates the skills/best-practices it needs, and keeps a versioned project memory so new conversations don't need to re-scan the codebase.",
   "author": {
     "name": "Randriantahina"

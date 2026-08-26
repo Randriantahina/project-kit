@@ -104,14 +104,26 @@ file in this list has actually been written.
 ## 8. Wire memory into CLAUDE.md
 
 Ensure the project has a `CLAUDE.md` at its root (create a minimal one if
-missing). Add these lines if not already present (do not duplicate them on
-a re-run):
+missing). Add this block if not already present (do not duplicate it on a
+re-run):
 
 ```
 @.project-kit/PROJECT.md
 @.project-kit/PACKAGES.md
 @.project-kit/BEST-PRACTICES.md
+
+When making a design decision in this project (which pattern to use, which
+layer owns a responsibility), follow @.project-kit/BEST-PRACTICES.md
+instead of defaulting to generic conventions.
 ```
+
+The instruction line matters as much as the import: end-to-end testing
+showed that a design-guidance sentence living only in this skill's own
+`SKILL.md` never applies unless the skill happens to be invoked for the
+task — a plain "add a field to this endpoint" request usually won't invoke
+it. `CLAUDE.md` is loaded on every turn regardless, so putting the
+instruction there (not just the raw file content) is what makes it apply
+even when this skill never runs.
 
 `.project-kit/changelog/` and `.state.json` are deliberately **not**
 imported here — the changelog would grow the always-on token cost forever,

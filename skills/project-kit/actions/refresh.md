@@ -38,14 +38,23 @@ Re-check the "state of this project" note from `init` step 5 (which
 patterns are followed/violated) against the current code, and update the
 idiomatic-guidance section if a newly added stack needs its own section.
 
-## 5. Rewrite the staleness state
+## 5. Check the CLAUDE.md wiring
+
+If the project's `CLAUDE.md` has the three `@.project-kit/...` import lines
+but is missing the "follow BEST-PRACTICES.md for design decisions"
+instruction line from `init.md` step 8 (e.g. this project was initialized
+before that instruction existed), add it now. Leave `CLAUDE.md` alone
+otherwise — this step is only a one-time catch-up, not something to rewrite
+on every refresh.
+
+## 6. Rewrite the staleness state
 
 Follow `references/staleness.md` to overwrite `.project-kit/.state.json`
 with the current git commit and manifest hashes — this is what clears the
 drift notice for future sessions. Do this even if steps 1-4 found nothing
 to change, since the state file must still reflect "checked as of now".
 
-## 6. Report
+## 7. Report
 
 Summarize what changed in these files (not a changelog entry — this is
 project-kit's own bookkeeping, not a task the user asked for). If nothing
