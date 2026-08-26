@@ -39,6 +39,11 @@ While writing code in such a project:
   propose a new entry under `.project-kit/changelog/` before ending the
   turn. Skip it for trivial one-line asks the user clearly considers
   throwaway.
+- This is a best-effort instruction, not a guarantee — `hooks/hooks.json`
+  installs a `Stop` hook (`hooks/check_changelog.js`) as a safety net: if it
+  blocks with a `project-kit:` message about a missing changelog entry,
+  treat that as the trigger to run `actions/log-change.md` now, the same as
+  if you'd remembered on your own.
 
 ## Design principles for the actions below
 

@@ -46,6 +46,15 @@ For local development instead, point at your working copy:
   notice project-kit surfaces when its memory has drifted from the current
   code.
 
+## Safety net
+
+A `Stop` hook (`hooks/check_changelog.js`) checks, at the end of a turn,
+whether a project-kit project has uncommitted changes and no changelog
+entry for today — if so it blocks once with a reminder to run `log`. It's
+throttled (won't re-nag within 15 minutes) and guarded against looping on
+its own continuation. It never writes anything itself; the confirm step in
+`log-change.md` is still what decides what gets recorded.
+
 ## Why
 
 Every new conversation on a project otherwise starts from zero: the agent

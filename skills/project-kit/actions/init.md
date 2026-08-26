@@ -7,13 +7,23 @@ before overwriting an existing `.project-kit/` in that case).
 ## 1. Detect the stack(s)
 
 Follow `../references/stack-detection.md`. A project can have more than one
-stack (e.g. a Laravel API + a Flutter app in the same repo, or a Rust/Axum
-backend). Detect all of them; don't force a single answer.
+stack (e.g. a Laravel API in `backend/` + a Flutter app in `frontend/`, or a
+Rust/Axum service alongside a React admin panel). Detect all of them; don't
+force a single answer, and note which subfolder each stack lives in when
+they're split like this.
 
 If nothing in the reference matches, look for the closest signal (a single
 recognizable manifest or config file, a dominant file extension) and name
 that stack anyway — the point is coverage, not a perfect taxonomy. If truly
 nothing is identifiable, tell the user and ask what the stack is.
+
+**Monorepo rule:** there is exactly one `.project-kit/` folder, at the
+**repository root**, regardless of how many stacks/subfolders are found —
+never one per subfolder. `PROJECT.md` (step 4) records the folder → stack
+mapping. Stack modules under `.project-kit/skills/` are named after the
+stack (`laravel.md`, `flutter.md`), not the folder; only add a folder suffix
+(`laravel-backend.md`, `laravel-admin.md`) if two subfolders genuinely use
+the *same* stack in different, non-interchangeable ways.
 
 ## 2. Generate the stack skill module(s)
 
@@ -50,6 +60,10 @@ code-organization conventions actually observed, and any architectural
 decisions visible in the code (why a folder is structured a certain way, an
 unusual choice worth flagging). Keep this to what isn't obvious from
 skimming the file tree — don't restate a directory listing.
+
+If more than one stack was detected (monorepo), open with an explicit
+folder → stack table (e.g. `backend/` → Laravel, `frontend/` → Flutter) —
+this is the one place that mapping is recorded.
 
 ## 5. Write the project's best-practices file
 
@@ -104,7 +118,15 @@ imported here — the changelog would grow the always-on token cost forever,
 and the state file is only useful to the staleness check, not as reading
 material.
 
-## 9. Report
+## 9. Ignore the local nag-throttle file
+
+Add `.project-kit/.nag-state.local.json` to the project's `.gitignore`
+(create the file if it doesn't exist yet) if not already present. This is a
+timestamp file the `Stop` hook uses to avoid nagging repeatedly about a
+missing changelog entry — purely local bookkeeping, not memory content, so
+it shouldn't be committed or trigger merge conflicts.
+
+## 10. Report
 
 Summarize what was created/detected in the chat: stacks found, files
 written, and remind the user these are plain files they should commit like
