@@ -48,12 +48,24 @@ For local development instead, point at your working copy:
 
 ## Safety net
 
-A `Stop` hook (`hooks/check_changelog.js`) checks, at the end of a turn,
-whether a project-kit project has uncommitted changes and no changelog
-entry for today — if so it blocks once with a reminder to run `log`. It's
-throttled (won't re-nag within 15 minutes) and guarded against looping on
-its own continuation. It never writes anything itself; the confirm step in
-`log-change.md` is still what decides what gets recorded.
+Two hooks do the parts a skill instruction can't reliably do on its own —
+real end-to-end testing showed that "always-on" prose in a skill only
+applies when the skill actually gets invoked, which a plain coding task
+often won't do. Hooks run regardless of that:
+
+- **`SessionStart` → `hooks/check_staleness.js`** — compares
+  `.project-kit/.state.json` against the current git HEAD and manifest
+  files; if either drifted since the last `init`/`refresh`, a one-line
+  notice lands in context automatically, at the start of the conversation.
+  Silent (zero extra tokens) when nothing is stale.
+- **`Stop` → `hooks/check_changelog.js`** — at the end of a turn, if a
+  project-kit project has uncommitted changes and no changelog entry for
+  today, blocks once with a reminder. Throttled (won't re-nag within 15
+  minutes) and guarded against looping on its own continuation.
+
+Neither hook writes project memory itself — they only surface a notice;
+the actual writes still go through `init`/`refresh`/`log-change.md`'s
+confirm step.
 
 ## Why
 

@@ -1,8 +1,16 @@
 # Staleness tracking
 
-Read this from `init.md`, `refresh.md`, and `SKILL.md`'s always-on section.
-It replaces guessing at "is this file still accurate?" with an objective
-check based on what changed on disk since the memory was last written.
+Read this from `init.md` and `refresh.md` to write the state file, and to
+understand what `hooks/check_staleness.js` checks automatically on every
+`SessionStart` (that script re-implements the "checking it" logic below
+directly in Node — it doesn't read this file at runtime, so keep the two in
+sync if you change the rules here).
+
+This replaces guessing at "is this file still accurate?" with an objective
+check based on what changed on disk since the memory was last written, and
+— because it runs as a hook rather than a skill instruction — it fires on
+every session regardless of whether project-kit itself gets invoked for
+the task at hand.
 
 ## The state file
 
@@ -35,11 +43,11 @@ during stack detection, and write/overwrite `.project-kit/.state.json` with
 the current timestamp. This is the last step of both actions, after
 everything else has been written.
 
-## Checking it (start of any task in a project with `.project-kit/`)
+## Checking it (done automatically by `hooks/check_staleness.js`)
 
 1. If `.project-kit/.state.json` is missing, this project predates this
-   feature (or was never fully initialized) — mention it once, suggest
-   `/project-kit refresh` to enable tracking, and move on without blocking.
+   feature (or was never fully initialized) — stay silent rather than
+   alarming on every session; `init`/`refresh` will create it.
 2. Otherwise compare:
    - current `git rev-parse HEAD` (if a git repo) against `gitCommit`.
      Different → the project has moved since the last sync. Try
@@ -47,11 +55,11 @@ everything else has been written.
      (e.g. history was rewritten), just note "history diverged" instead.
    - a fresh hash of each file listed in `manifestHashes` against the
      stored value. Any mismatch → dependencies changed since the last sync.
-3. If either check shows drift, surface **one short line** at the start of
-   your response (not a blocking question): what's stale and roughly by how
-   much (e.g. "project-kit memory is 42 commits behind HEAD, dependencies
-   unchanged — consider `/project-kit refresh`"). Then proceed using the
-   existing memory anyway.
+3. If either check shows drift, print **one short line** to stdout and exit
+   0 — on `SessionStart`, that output is added directly to the
+   conversation's context, so it's visible from the very first turn without
+   anyone needing to invoke the skill. If nothing is stale, print nothing:
+   a healthy project should cost zero extra tokens for this check.
 
 Never re-run a full `init`/`refresh` automatically just because this check
 found drift — that would burn the exact token budget this whole mechanism

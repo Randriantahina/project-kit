@@ -22,18 +22,27 @@ by `actions/init.md`, so they load automatically at the start of every
 session — do not re-read the whole codebase to rediscover facts already
 in these files.
 
-Don't rely on judgment alone to decide whether they're stale: follow
-`references/staleness.md` to check `.project-kit/.state.json` against the
-current repo state, and surface a one-line notice if it has drifted. Only
-fall back to a fresh scan of a specific fact if that check flags drift, a
-file is missing, or something you observe in the code directly contradicts
-what's written.
+Staleness is checked automatically: `hooks/check_staleness.js` runs on
+`SessionStart` and, if `.project-kit/.state.json` shows the repo has moved
+or a tracked manifest changed since the last `init`/`refresh`, a
+`project-kit:` notice is already in your context at the start of this
+conversation — you don't need to invoke anything to see it. Treat that
+notice as the signal to suggest `/project-kit refresh`, not something to
+verify yourself (see `references/staleness.md` if you need the mechanics,
+e.g. to run `refresh` and understand what it recomputes). Beyond that
+notice, only fall back to a fresh scan of a specific fact if a file is
+missing or something you observe in the code directly contradicts what's
+written.
 
 While writing code in such a project:
 - Consult `.project-kit/BEST-PRACTICES.md` for the design choice to make
   (which pattern, which layer owns what responsibility) — it already
   contains the idiomatic answer for this project's stack, not just generic
-  theory.
+  theory. Unlike the two behaviors below, nothing forces this one — a hook
+  can't judge a design decision — so it only happens if this skill is
+  actually loaded for the task at hand. If the user cares about it being
+  applied consistently even on small tasks, they should say so or invoke
+  `/project-kit` explicitly.
 - After finishing a meaningful task (new feature, bug fix, refactor,
   migration, non-trivial config change), follow `actions/log-change.md` to
   propose a new entry under `.project-kit/changelog/` before ending the
