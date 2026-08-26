@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "project-kit",
+  "version": "0.1.0",
+  "description": "Marketplace hosting the project-kit plugin: per-stack skill generation and versioned project memory.",
+  "owner": {
+    "name": "Randriantahina"
+  },
+  "plugins": [
+    {
+      "name": "project-kit",
+      "source": "./",
+      "description": "Detects a project's stack, generates the skills/best-practices it needs, and keeps a versioned project memory so new conversations don't need to re-scan the codebase.",
+      "strict": false
+    }
+  ]
+}
